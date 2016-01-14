@@ -1,0 +1,92 @@
+apply plugin: 'com.android.application'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.android.support:support-v4:+'
+    compile 'com.google.android.gms:play-services:3.2.+'
+    compile 'net.hockeyapp.android:HockeySDK:3.6.+'
+    compile 'com.googlecode.mp4parser:isoparser:1.0.+'
+    compile files('lib/neoad.1.0.3.jar')
+    compile files('lib/adad-2.8.jar')
+}
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion '23.0.2'
+
+    useLibrary 'org.apache.http.legacy'
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+/**
+    signingConfigs {
+        debug {
+            storeFile file("config/release.keystore")
+            storePassword RELEASE_STORE_PASSWORD
+            keyAlias RELEASE_KEY_ALIAS
+            keyPassword RELEASE_KEY_PASSWORD
+        }
+
+        release {
+            storeFile file("config/release.keystore")
+            storePassword RELEASE_STORE_PASSWORD
+            keyAlias RELEASE_KEY_ALIAS
+            keyPassword RELEASE_KEY_PASSWORD
+        }
+    }
+*/
+    buildTypes {
+        debug {
+            debuggable true
+            jniDebuggable true
+            //signingConfig signingConfigs.debug
+            //applicationIdSuffix ".cafetelegram"
+        }
+
+        release {
+            debuggable false
+            jniDebuggable false
+            lintOptions {
+                disable 'MissingTranslation'
+            }
+            //signingConfig signingConfigs.release
+            //applicationIdSuffix ".cafetelegram"
+        }
+
+        foss {
+            debuggable false
+            jniDebuggable false
+            //signingConfig signingConfigs.release
+            //applicationIdSuffix ".cafetelegram"
+        }
+    }
+
+    sourceSets.main {
+        jniLibs.srcDir 'lib'
+        jni.srcDirs = [] //disable automatic ndk-build call
+    }
+
+    sourceSets.debug {
+        manifest.srcFile 'config/debug/AndroidManifest.xml'
+    }
+
+    sourceSets.release {
+        manifest.srcFile 'config/release/AndroidManifest.xml'
+    }
+
+    sourceSets.foss {
+        manifest.srcFile 'config/foss/AndroidManifest.xml'
+    }
+
+    defaultConfig {
+        minSdkVersion 8
+        targetSdkVersion 23
+        versionCode 100
+        versionName "1.0.0"
+    }
+}
